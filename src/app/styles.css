@@ -1,21 +1,23 @@
 :root {
-  color: #e8f7ff;
-  background: #06111f;
+  color: #eaf9ff;
+  background: #030b18;
   font-family: Inter, 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --bg: #06111f;
-  --panel: rgb(8 27 48 / 78%);
-  --panel-strong: rgb(12 45 73 / 86%);
-  --border: rgb(99 208 255 / 24%);
-  --cyan: #42d8ff;
-  --blue: #3d7cff;
-  --green: #49f2b8;
-  --yellow: #ffd166;
+  --bg: #030b18;
+  --panel: rgb(5 22 44 / 82%);
+  --panel-strong: rgb(9 44 74 / 88%);
+  --border: rgb(102 217 255 / 28%);
+  --cyan: #45d9ff;
+  --blue: #2f75ff;
+  --green: #56f0c0;
+  --yellow: #f4c96b;
   --red: #ff6b7a;
-  --text: #e8f7ff;
-  --muted: #89a7bf;
+  --jade: #78ead6;
+  --gold: #f4c96b;
+  --text: #eaf9ff;
+  --muted: #91b3ca;
 }
 
 * {
@@ -34,9 +36,25 @@ body,
 body {
   min-width: 320px;
   background:
-    radial-gradient(circle at 16% 12%, rgb(42 146 255 / 18%), transparent 28%),
-    radial-gradient(circle at 78% 18%, rgb(78 242 184 / 12%), transparent 24%),
-    linear-gradient(135deg, #050914 0%, #071c30 42%, #091422 100%);
+    linear-gradient(145deg, rgb(6 20 45 / 92%) 0%, rgb(3 11 24 / 96%) 48%, #061323 100%),
+    radial-gradient(circle at 17% 14%, rgb(69 217 255 / 18%), transparent 26%),
+    radial-gradient(circle at 78% 20%, rgb(86 240 192 / 10%), transparent 24%);
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(rgb(69 217 255 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(69 217 255 / 4%) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 118%, rgb(244 201 107 / 14%) 0 12%, transparent 42%);
+  background-size:
+    34px 34px,
+    34px 34px,
+    100% 100%;
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 72%), rgb(0 0 0 / 26%));
 }
 
 button,

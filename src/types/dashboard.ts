@@ -40,10 +40,13 @@ export interface ActivityItem {
   message: string
 }
 
-export interface MapNode {
+export interface HubNode {
+  id: string
   name: string
   value: number
   coord: [number, number]
+  status: 'good' | 'warning' | 'danger'
+  description: string
 }
 
 export interface DashboardData {
@@ -54,5 +57,5 @@ export interface DashboardData {
   ranking: RankingItem[]
   radar: RadarData
   activities: ActivityItem[]
-  mapNodes: MapNode[]
+  hubNodes: HubNode[]
 }

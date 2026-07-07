@@ -10,10 +10,10 @@
 .big-screen-layout {
   width: 100vw;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   background:
-    linear-gradient(rgb(66 216 255 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(66 216 255 / 5%) 1px, transparent 1px);
+    linear-gradient(rgb(69 217 255 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(69 217 255 / 4%) 1px, transparent 1px);
   background-size: 34px 34px;
 }
 

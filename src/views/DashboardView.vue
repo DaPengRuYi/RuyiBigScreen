@@ -23,8 +23,8 @@
             </BasePanel>
           </div>
 
-          <BasePanel title="中心态势总览" class="dashboard-view__map">
-            <MapOverviewChart :data="dashboard.data.mapNodes" />
+          <BasePanel title="如意数据中枢" class="dashboard-view__hub">
+            <DataHubChart :data="dashboard.data.hubNodes" />
           </BasePanel>
 
           <div class="dashboard-view__right">
@@ -64,7 +64,7 @@ import { onMounted } from 'vue'
 
 import BarRankingChart from '../charts/BarRankingChart.vue'
 import LineTrendChart from '../charts/LineTrendChart.vue'
-import MapOverviewChart from '../charts/MapOverviewChart.vue'
+import DataHubChart from '../charts/DataHubChart.vue'
 import PieStatusChart from '../charts/PieStatusChart.vue'
 import RadarAbilityChart from '../charts/RadarAbilityChart.vue'
 import BasePanel from '../components/BasePanel.vue'
@@ -119,7 +119,7 @@ onMounted(() => {
   min-height: 0;
 }
 
-.dashboard-view__map {
+.dashboard-view__hub {
   min-height: 0;
 }
 

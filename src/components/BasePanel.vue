@@ -24,19 +24,28 @@ defineProps<{
   padding: 14px;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgb(66 216 255 / 9%), transparent 36%), var(--panel);
+    linear-gradient(135deg, rgb(69 217 255 / 13%), transparent 38%),
+    linear-gradient(180deg, rgb(244 201 107 / 5%), transparent 36%),
+    var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
-  box-shadow: inset 0 0 24px rgb(61 124 255 / 8%);
+  box-shadow:
+    inset 0 0 28px rgb(47 117 255 / 10%),
+    0 0 24px rgb(69 217 255 / 6%);
+}
+
+.base-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .base-panel::before,
 .base-panel::after {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   content: '';
-  border-color: rgb(66 216 255 / 62%);
+  border-color: rgb(69 217 255 / 72%);
 }
 
 .base-panel::before {
@@ -53,6 +62,20 @@ defineProps<{
   border-bottom: 2px solid;
 }
 
+.base-panel__body::before {
+  position: absolute;
+  right: -8px;
+  bottom: -14px;
+  width: 150px;
+  height: 52px;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(135deg, transparent 42%, rgb(244 201 107 / 12%) 43% 45%, transparent 46%),
+    linear-gradient(45deg, transparent 47%, rgb(69 217 255 / 10%) 48% 50%, transparent 51%);
+  opacity: 0.72;
+}
+
 .base-panel__header {
   display: flex;
   gap: 8px;
@@ -64,8 +87,8 @@ defineProps<{
 .base-panel__mark {
   width: 8px;
   height: 8px;
-  background: var(--green);
-  box-shadow: 0 0 14px var(--green);
+  background: var(--gold);
+  box-shadow: 0 0 14px var(--gold);
   transform: rotate(45deg);
 }
 
@@ -78,6 +101,7 @@ defineProps<{
   color: var(--text);
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-shadow: 0 0 14px rgb(69 217 255 / 26%);
 }
 
 .base-panel__body {

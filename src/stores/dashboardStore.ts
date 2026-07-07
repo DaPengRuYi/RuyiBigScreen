@@ -8,6 +8,7 @@ interface DashboardState {
   data: DashboardData | null
   loading: boolean
   error: string | null
+  realtimeTimer: ReturnType<typeof window.setInterval> | null
 }
 
 export const useDashboardStore = defineStore('dashboard', {
@@ -15,10 +16,13 @@ export const useDashboardStore = defineStore('dashboard', {
     data: null,
     loading: false,
     error: null,
+    realtimeTimer: null,
   }),
   actions: {
-    async loadDashboard() {
-      this.loading = true
+    async loadDashboard(options: { silent?: boolean } = {}) {
+      if (!options.silent) {
+        this.loading = true
+      }
       this.error = null
 
       try {
@@ -30,6 +34,20 @@ export const useDashboardStore = defineStore('dashboard', {
       } finally {
         this.loading = false
       }
+    },
+    startRealtime() {
+      if (this.realtimeTimer) return
+
+      void this.loadDashboard()
+      this.realtimeTimer = window.setInterval(() => {
+        void this.loadDashboard({ silent: true })
+      }, 2000)
+    },
+    stopRealtime() {
+      if (!this.realtimeTimer) return
+
+      window.clearInterval(this.realtimeTimer)
+      this.realtimeTimer = null
     },
   },
 })

@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
 
 import BarRankingChart from '../charts/BarRankingChart.vue'
 import LineTrendChart from '../charts/LineTrendChart.vue'
@@ -76,7 +76,11 @@ import { useDashboardStore } from '../stores/dashboardStore'
 const dashboard = useDashboardStore()
 
 onMounted(() => {
-  void dashboard.loadDashboard()
+  dashboard.startRealtime()
+})
+
+onBeforeUnmount(() => {
+  dashboard.stopRealtime()
 })
 </script>
 

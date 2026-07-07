@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . && stylelint \"src/**/*.{css,vue}\"",
     "format": "prettier --write .",
+    "screenshot": "node scripts/capture-dashboard.mjs",
+    "screenshot:dashboard": "node scripts/capture-dashboard.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },

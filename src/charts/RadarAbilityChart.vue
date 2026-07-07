@@ -1,58 +1,57 @@
 <template>
-  <div ref="chartRef" class="echarts" data-testid="radar-ability-chart"></div>
+  <div
+    ref="chartRef"
+    class="chart"
+    data-testid="chart-radar"
+  />
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import type { RadarData } from '../types/dashboard'
-import { observeResize } from '../utils/resize'
+import type { RadarData } from '@/types/dashboard'
+import { useElementResize } from '@/utils/resize'
 
 const props = defineProps<{
   data: RadarData
 }>()
 
-const chartRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
-let resizeObserver: ResizeObserver | null = null
+const chartRef = ref<HTMLElement | null>(null)
+let chart: echarts.ECharts | undefined
 
 function renderChart() {
-  if (!chart) return
+  if (!chartRef.value) {
+    return
+  }
 
+  chart ??= echarts.init(chartRef.value)
   chart.setOption({
-    color: ['#49f2b8'],
+    color: ['#2ee6ff'],
     radar: {
-      radius: '66%',
+      center: ['50%', '54%'],
+      radius: '68%',
       indicator: props.data.indicators,
-      axisName: { color: '#e8f7ff' },
-      splitLine: { lineStyle: { color: 'rgba(137, 167, 191, 0.22)' } },
-      splitArea: { areaStyle: { color: ['rgba(66, 216, 255, 0.05)'] } },
-      axisLine: { lineStyle: { color: 'rgba(137, 167, 191, 0.24)' } },
+      axisName: { color: '#d6edf7' },
+      splitArea: { areaStyle: { color: ['rgba(46, 230, 255, 0.04)', 'transparent'] } },
+      axisLine: { lineStyle: { color: 'rgba(92, 170, 210, 0.28)' } },
+      splitLine: { lineStyle: { color: 'rgba(92, 170, 210, 0.2)' } },
     },
     series: [
       {
-        name: '教学能力模型',
         type: 'radar',
-        areaStyle: { opacity: 0.24 },
+        data: [{ name: '能力指数', value: props.data.values }],
+        areaStyle: { color: 'rgba(46, 230, 255, 0.22)' },
         lineStyle: { width: 2 },
-        data: [{ value: props.data.values, name: '掌握度' }],
+        symbolSize: 5,
       },
     ],
   })
 }
 
-onMounted(() => {
-  if (!chartRef.value) return
-  chart = echarts.init(chartRef.value)
-  resizeObserver = observeResize(chartRef.value, () => chart?.resize())
-  renderChart()
-})
-
+onMounted(renderChart)
 watch(() => props.data, renderChart, { deep: true })
+useElementResize(chartRef, () => chart?.resize())
 
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  chart?.dispose()
-})
+onBeforeUnmount(() => chart?.dispose())
 </script>

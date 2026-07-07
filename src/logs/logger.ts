@@ -1,34 +1,18 @@
-type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+type LogMeta = Record<string, unknown>
+type LogMethod = (message: string, meta?: LogMeta) => void
 
-class Logger {
-  private readonly enabled = import.meta.env.DEV
-
-  debug(message: string, ...args: unknown[]) {
-    this.write('debug', message, args)
+function write(level: 'info' | 'warn' | 'error' | 'debug', message: string, meta?: LogMeta) {
+  if (import.meta.env.PROD && level === 'debug') {
+    return
   }
 
-  info(message: string, ...args: unknown[]) {
-    this.write('info', message, args)
-  }
-
-  warn(message: string, ...args: unknown[]) {
-    this.write('warn', message, args)
-  }
-
-  error(message: string, ...args: unknown[]) {
-    this.write('error', message, args)
-  }
-
-  private write(level: LogLevel, message: string, args: unknown[]) {
-    if (!this.enabled && level === 'debug') return
-
-    const payload = [`[RuyiBigScreen][${level}] ${message}`, ...args]
-
-    if (level === 'error') console.error(...payload)
-    else if (level === 'warn') console.warn(...payload)
-    else if (level === 'debug') console.debug(...payload)
-    else console.info(...payload)
-  }
+  const payload = meta ? [message, meta] : [message]
+  console[level](`[RuyiBigScreen] ${level.toUpperCase()}`, ...payload)
 }
 
-export const logger = new Logger()
+export const logger: Record<'info' | 'warn' | 'error' | 'debug', LogMethod> = {
+  info: (message, meta) => write('info', message, meta),
+  warn: (message, meta) => write('warn', message, meta),
+  error: (message, meta) => write('error', message, meta),
+  debug: (message, meta) => write('debug', message, meta),
+}

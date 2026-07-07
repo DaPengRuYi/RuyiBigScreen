@@ -1,69 +1,67 @@
 <template>
-  <div ref="chartRef" class="echarts" data-testid="bar-ranking-chart"></div>
+  <div
+    ref="chartRef"
+    class="chart"
+    data-testid="chart-ranking"
+  />
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import type { RankingItem } from '../types/dashboard'
-import { observeResize } from '../utils/resize'
+import type { RankingItem } from '@/types/dashboard'
+import { useElementResize } from '@/utils/resize'
 
 const props = defineProps<{
   data: RankingItem[]
 }>()
 
-const chartRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
-let resizeObserver: ResizeObserver | null = null
+const chartRef = ref<HTMLElement | null>(null)
+let chart: echarts.ECharts | undefined
 
 function renderChart() {
-  if (!chart) return
+  if (!chartRef.value) {
+    return
+  }
 
+  chart ??= echarts.init(chartRef.value)
   chart.setOption({
-    color: ['#3d7cff'],
+    grid: { left: 48, right: 18, top: 18, bottom: 24 },
     tooltip: { trigger: 'axis' },
-    grid: { top: 16, right: 22, bottom: 24, left: 48 },
     xAxis: {
-      type: 'category',
-      data: props.data.map((item) => item.city),
-      axisLine: { lineStyle: { color: '#31506a' } },
-      axisLabel: { color: '#89a7bf' },
+      type: 'value',
+      splitLine: { lineStyle: { color: 'rgba(92, 170, 210, 0.14)' } },
+      axisLabel: { color: '#9bb9cc' },
     },
     yAxis: {
-      type: 'value',
-      splitLine: { lineStyle: { color: 'rgba(137, 167, 191, 0.16)' } },
-      axisLabel: { color: '#89a7bf' },
+      type: 'category',
+      data: props.data.map((item) => item.city).reverse(),
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: { color: '#d6edf7' },
     },
     series: [
       {
-        name: '访问量',
         type: 'bar',
-        barWidth: 18,
+        barWidth: 12,
+        data: props.data.map((item) => item.value).reverse(),
         itemStyle: {
-          borderRadius: [4, 4, 0, 0],
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#49f2b8' },
-            { offset: 1, color: '#3d7cff' },
+          borderRadius: [0, 8, 8, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: '#2f80ed' },
+            { offset: 0.55, color: '#2ee6ff' },
+            { offset: 1, color: '#f9d85e' },
           ]),
         },
-        data: props.data.map((item) => item.value),
       },
     ],
   })
 }
 
-onMounted(() => {
-  if (!chartRef.value) return
-  chart = echarts.init(chartRef.value)
-  resizeObserver = observeResize(chartRef.value, () => chart?.resize())
-  renderChart()
-})
-
+onMounted(renderChart)
 watch(() => props.data, renderChart, { deep: true })
+useElementResize(chartRef, () => chart?.resize())
 
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  chart?.dispose()
-})
+onBeforeUnmount(() => chart?.dispose())
 </script>

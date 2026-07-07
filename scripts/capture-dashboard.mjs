@@ -41,13 +41,13 @@ async function captureDashboard() {
   }
 
   try {
-    await page.getByRole('heading', { name: /如意智能教学数据中心/ }).waitFor({
+    await page.getByRole('heading', { name: /如意数据大屏 RuyiBigScreen/ }).waitFor({
       state: 'visible',
       timeout: 15_000,
     })
     await page.getByTestId('metric-card').first().waitFor({ state: 'visible' })
-    await page.getByText('如意数据中枢').first().waitFor({ state: 'visible' })
-    await page.getByTestId('data-hub-chart').waitFor({ state: 'visible' })
+    await page.getByText('中心态势总览').first().waitFor({ state: 'visible' })
+    await page.getByTestId('chart-map').waitFor({ state: 'visible' })
 
     const loadFailure = await page.getByText('数据加载失败').count()
     if (loadFailure > 0) {

@@ -1,74 +1,73 @@
 <template>
-  <div ref="chartRef" class="echarts" data-testid="line-trend-chart"></div>
+  <div
+    ref="chartRef"
+    class="chart"
+    data-testid="chart-line"
+  />
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import type { TrendPoint } from '../types/dashboard'
-import { observeResize } from '../utils/resize'
+import type { TrendPoint } from '@/types/dashboard'
+import { useElementResize } from '@/utils/resize'
 
 const props = defineProps<{
   data: TrendPoint[]
 }>()
 
-const chartRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
-let resizeObserver: ResizeObserver | null = null
+const chartRef = ref<HTMLElement | null>(null)
+let chart: echarts.ECharts | undefined
 
 function renderChart() {
-  if (!chart) return
+  if (!chartRef.value) {
+    return
+  }
 
+  chart ??= echarts.init(chartRef.value)
   chart.setOption({
-    color: ['#42d8ff', '#49f2b8'],
+    color: ['#2ee6ff', '#ffd166'],
+    grid: { left: 42, right: 18, top: 34, bottom: 28 },
     tooltip: { trigger: 'axis' },
-    legend: {
-      top: 0,
-      right: 0,
-      textStyle: { color: '#89a7bf' },
-    },
-    grid: { top: 34, right: 18, bottom: 24, left: 44 },
+    legend: { top: 0, right: 0, textStyle: { color: '#a9c6dc' } },
     xAxis: {
       type: 'category',
+      boundaryGap: false,
       data: props.data.map((item) => item.time),
-      axisLine: { lineStyle: { color: '#31506a' } },
-      axisLabel: { color: '#89a7bf' },
+      axisLine: { lineStyle: { color: '#24485e' } },
+      axisLabel: { color: '#9bb9cc' },
     },
     yAxis: {
       type: 'value',
-      splitLine: { lineStyle: { color: 'rgba(137, 167, 191, 0.16)' } },
-      axisLabel: { color: '#89a7bf' },
+      splitLine: { lineStyle: { color: 'rgba(92, 170, 210, 0.16)' } },
+      axisLabel: { color: '#9bb9cc' },
     },
     series: [
       {
         name: '访问量',
         type: 'line',
         smooth: true,
-        areaStyle: { opacity: 0.16 },
+        symbol: 'circle',
+        areaStyle: { color: 'rgba(46, 230, 255, 0.14)' },
         data: props.data.map((item) => item.visits),
       },
       {
         name: '订单数',
         type: 'line',
         smooth: true,
+        yAxisIndex: 0,
         data: props.data.map((item) => item.orders),
       },
     ],
   })
 }
 
-onMounted(() => {
-  if (!chartRef.value) return
-  chart = echarts.init(chartRef.value)
-  resizeObserver = observeResize(chartRef.value, () => chart?.resize())
-  renderChart()
-})
-
+onMounted(renderChart)
 watch(() => props.data, renderChart, { deep: true })
+useElementResize(chartRef, () => chart?.resize())
 
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
   chart?.dispose()
 })
 </script>

@@ -1,13 +1,13 @@
-import { nextDashboardFrame } from '../mocks/realtimeDashboardSimulator'
-import type { DashboardData } from '../types/dashboard'
-import { getDataSource } from './dataSource'
-import { httpClient } from './http'
+import { dashboardMock } from '@/mocks/dashboardMock'
+import { getDataSource } from '@/services/dataSource'
+import { http } from '@/services/http'
+import type { DashboardData } from '@/types/dashboard'
 
-export async function fetchDashboardData(): Promise<DashboardData> {
+export async function getDashboardData(): Promise<DashboardData> {
   if (getDataSource() === 'mock') {
-    return Promise.resolve(nextDashboardFrame())
+    return Promise.resolve(structuredClone(dashboardMock))
   }
 
-  const response = await httpClient.get<DashboardData>('/dashboard')
+  const response = await http.get<DashboardData>('/api/dashboard')
   return response.data
 }

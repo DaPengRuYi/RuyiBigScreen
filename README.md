@@ -16,9 +16,9 @@ RuyiBigScreen 是一个教学型数据可视化大屏项目，用 Vue 3、TypeSc
 
 - 16:9 风格的数据大屏布局，适合课堂演示和项目截图。
 - Vue 3 + TypeScript 组织页面、组件、图表和服务层。
-- ECharts 封装访问趋势、分类占比、城市排名、雷达模型和如意数据中枢。
-- Pinia 管理 dashboard 数据加载、实时刷新和定时器清理。
-- mock 模式下模拟指标、趋势、动态消息和业务节点的实时变化。
+- ECharts 封装访问趋势、分类占比、城市排名、雷达模型和中心态势总览。
+- Pinia 管理 dashboard 数据加载和页面状态。
+- mock 模式下提供稳定的教学演示数据。
 - Axios API 通道已预留，可通过环境变量切换数据源。
 - Vitest 覆盖工具函数和 dashboard service 基础行为。
 - Playwright 覆盖首页可见性、实时刷新和控制台错误检查。
@@ -38,37 +38,37 @@ RuyiBigScreen 是一个教学型数据可视化大屏项目，用 Vue 3、TypeSc
 
 ## 页面内容
 
-- 顶部标题与当前时间：展示“如意智能教学数据中心”和实时钟表。
+- 顶部标题与当前时间：展示“如意数据大屏 RuyiBigScreen”和实时钟表。
 - 核心指标卡片：今日访问量、实时订单数、活跃用户数、系统健康度。
 - 访问趋势：展示访问量和订单数的滑动趋势窗口。
 - 分类占比：展示课程学习、项目实战、资料下载等分类占比。
-- 如意数据中枢：用中心节点、业务节点和动态流线表示教学数据流转。
+- 中心态势总览：用“如意中枢”和周边业务节点表示教学数据流转。
 - 城市访问排名：展示不同城市访问量排序。
 - 能力雷达模型：展示前端基础、图表配置、数据建模等学习能力维度。
 - 实时动态与告警：展示教学数据中心的最新动态和轻量告警。
 
-## 实时数据模拟
+## Mock 数据
 
-当前项目已经实现前端 mock 实时变化。页面进入时会立即加载一次数据，并每 2 秒刷新一次：
+当前项目默认使用前端 mock 数据。页面进入时会加载一次 dashboard 数据：
 
-- 顶部指标会随业务规则变化。
-- 访问趋势会追加新时间点，并保留有限长度。
-- 实时动态会滚动生成新的教学场景消息。
-- 如意数据中枢节点的活跃度和状态会小幅变化。
-- 城市排名、分类占比和雷达数据会低频更新。
+- 顶部指标来自 mock summary。
+- 访问趋势、分类占比、城市排名和雷达模型来自 mock 数据集。
+- 中心态势总览使用 mock 节点构造业务关系图。
+- 实时动态与告警使用 mock 活动列表。
 
-这些变化都来自本地 mock 模拟器，不代表真实后端数据。
+这些内容都来自本地 mock 数据，不代表真实后端数据。
 
 ## 项目结构
 
 ```text
 src/
   app/              # 应用入口与全局样式
+  assets/           # 静态资源与全局样式资源
   charts/           # ECharts 图表组件
   components/       # 通用 UI 组件
   layouts/          # 大屏布局
   logs/             # 日志封装
-  mocks/            # mock 数据与实时模拟器
+  mocks/            # mock 数据与 MSW handler
   services/         # 数据访问与数据源切换
   stores/           # Pinia store
   tests/            # 单元测试与 E2E 测试
@@ -96,7 +96,7 @@ npm install
 启动开发服务：
 
 ```bash
-npm run dev -- --host 127.0.0.1 --port 10001
+npm run dev
 ```
 
 浏览器访问：
@@ -121,12 +121,15 @@ npm run screenshot:dashboard
 
 ## 数据源说明
 
-项目默认使用 mock 数据源。mock 模式下，`dashboardService` 会调用本地实时模拟器生成下一帧 dashboard 数据，页面不会请求真实后端。
+项目默认使用 mock 数据源。mock 模式下，`dashboardService` 会返回本地 dashboard mock 数据，页面不会请求真实后端。
+
+页面组件只通过 `src/services/dashboardService.ts` 获取数据，不直接读取 mock 文件。
 
 如果后续需要接入真实 API，可以设置：
 
 ```bash
 VITE_DATA_SOURCE=api
+VITE_API_BASE_URL=https://your-api.example.com
 ```
 
 在 API 模式下，服务层会通过 Axios 访问预留接口 `/dashboard`。当前仓库没有附带真实后端服务。
@@ -136,7 +139,7 @@ VITE_DATA_SOURCE=api
 项目提供 Playwright 截图脚本，用于生成固定尺寸的大屏展示图。先启动开发服务：
 
 ```bash
-npm run dev -- --host 127.0.0.1 --port 10001
+npm run dev
 ```
 
 再执行截图：
@@ -157,7 +160,7 @@ http://127.0.0.1:10001/
 docs/screenshots/dashboard-1920x1080.png
 ```
 
-截图视口为 `1920x1080`。脚本会等待标题、指标卡片和如意数据中枢渲染完成，并等待实时数据刷新一轮；如果浏览器 console 出现 error，截图会保留，但命令会失败并打印错误列表。
+截图视口为 `1920x1080`。脚本会等待标题、指标卡片和中心态势总览渲染完成；如果浏览器 console 出现 error，截图会保留，但命令会失败并打印错误列表。
 
 ## 测试与质量保障
 
@@ -186,7 +189,7 @@ npm run test:e2e
 - 数据大屏 16:9 布局与响应式约束。
 - ECharts 图表封装和 resize 处理。
 - mock 数据、service 层和 API 切换设计。
-- Pinia 状态管理与页面定时刷新。
+- Pinia 状态管理与页面数据加载。
 - TypeScript 类型建模。
 - Vitest 单元测试和 Playwright E2E 测试。
 - 自动化截图在 README、课程资料和视觉验收中的用法。
@@ -197,7 +200,7 @@ npm run test:e2e
 - 接入真实 API 示例。
 - 增加更多教学场景图表组件。
 - 增加主题切换能力。
-- 增加视觉回归测试示例。
+- 增加实时数据模拟和视觉回归测试示例。
 - 补充部署到静态站点平台的示例流程。
 
 ## License

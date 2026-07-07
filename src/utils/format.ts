@@ -6,9 +6,12 @@ export function formatPercent(value: number): string {
   return `${value.toFixed(1)}%`
 }
 
-export function formatTrend(value: number): string {
-  const prefix = value > 0 ? '+' : ''
-  return `${prefix}${value.toFixed(1)}%`
+export function formatMetricValue(value: number, unit: string): string {
+  if (unit === '%') {
+    return formatPercent(value)
+  }
+
+  return `${formatNumber(value)}${unit}`
 }
 
 export function formatClock(date: Date): string {

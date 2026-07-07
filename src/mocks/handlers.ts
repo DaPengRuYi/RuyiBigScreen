@@ -1,9 +1,9 @@
 import { http, HttpResponse } from 'msw'
 
-import { nextDashboardFrame } from './realtimeDashboardSimulator'
+import { dashboardMock } from './dashboardMock'
 
 export const handlers = [
   http.get('/api/dashboard', () => {
-    return HttpResponse.json(nextDashboardFrame())
+    return HttpResponse.json(dashboardMock)
   }),
 ]

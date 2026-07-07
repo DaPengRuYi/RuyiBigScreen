@@ -1,17 +1,22 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatNumber, formatPercent, formatTrend } from '../../utils/format'
+import { formatClock, formatMetricValue, formatNumber, formatPercent } from '@/utils/format'
 
 describe('format utils', () => {
-  it('formats numbers with Chinese locale separators', () => {
-    expect(formatNumber(128936)).toBe('128,936')
+  it('formats large numbers for Chinese locale', () => {
+    expect(formatNumber(128960)).toBe('128,960')
   })
 
-  it('formats percentages with one decimal place', () => {
-    expect(formatPercent(98.66)).toBe('98.7%')
+  it('formats percentages with one decimal', () => {
+    expect(formatPercent(98.666)).toBe('98.7%')
   })
 
-  it('formats positive trends with plus sign', () => {
-    expect(formatTrend(12.6)).toBe('+12.6%')
+  it('formats metric values with units', () => {
+    expect(formatMetricValue(3684, '单')).toBe('3,684单')
+    expect(formatMetricValue(98.7, '%')).toBe('98.7%')
+  })
+
+  it('formats clock values with date and time', () => {
+    expect(formatClock(new Date('2026-07-07T13:14:15+08:00'))).toContain('2026/07/07')
   })
 })

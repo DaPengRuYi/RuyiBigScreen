@@ -1,53 +1,35 @@
 import { defineStore } from 'pinia'
 
-import { logger } from '../logs/logger'
-import { fetchDashboardData } from '../services/dashboardService'
-import type { DashboardData } from '../types/dashboard'
+import { logger } from '@/logs/logger'
+import { getDashboardData } from '@/services/dashboardService'
+import type { DashboardData } from '@/types/dashboard'
 
 interface DashboardState {
   data: DashboardData | null
   loading: boolean
-  error: string | null
-  realtimeTimer: ReturnType<typeof window.setInterval> | null
+  error: string
 }
 
 export const useDashboardStore = defineStore('dashboard', {
   state: (): DashboardState => ({
     data: null,
     loading: false,
-    error: null,
-    realtimeTimer: null,
+    error: '',
   }),
   actions: {
-    async loadDashboard(options: { silent?: boolean } = {}) {
-      if (!options.silent) {
-        this.loading = true
-      }
-      this.error = null
+    async fetchDashboard() {
+      this.loading = true
+      this.error = ''
 
       try {
-        this.data = await fetchDashboardData()
-        logger.info('Dashboard data loaded', this.data.updatedAt)
+        this.data = await getDashboardData()
+        logger.info('Dashboard data loaded')
       } catch (error) {
-        this.error = '数据加载失败'
-        logger.error('Dashboard data load failed', error)
+        this.error = error instanceof Error ? error.message : '数据加载失败'
+        logger.error('Dashboard data load failed', { error: this.error })
       } finally {
         this.loading = false
       }
-    },
-    startRealtime() {
-      if (this.realtimeTimer) return
-
-      void this.loadDashboard()
-      this.realtimeTimer = window.setInterval(() => {
-        void this.loadDashboard({ silent: true })
-      }, 2000)
-    },
-    stopRealtime() {
-      if (!this.realtimeTimer) return
-
-      window.clearInterval(this.realtimeTimer)
-      this.realtimeTimer = null
     },
   },
 })

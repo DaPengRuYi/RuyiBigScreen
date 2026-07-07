@@ -1,5 +1,9 @@
 <template>
-  <div ref="chartRef" class="echarts" data-testid="data-hub-chart"></div>
+  <div
+    ref="chartRef"
+    class="echarts"
+    data-testid="data-hub-chart"
+  />
 </template>
 
 <script setup lang="ts">

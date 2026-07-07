@@ -3,8 +3,9 @@
   background: #030b18;
   font-family: Inter, 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', Arial, sans-serif;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
+
   --bg: #030b18;
   --panel: rgb(5 22 44 / 82%);
   --panel-strong: rgb(9 44 74 / 88%);

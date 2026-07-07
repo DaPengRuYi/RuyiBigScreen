@@ -2,25 +2,20 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'
-import './styles.css'
-import { logger } from '../logs/logger'
+import '@/assets/styles/global.css'
+import { logger } from '@/logs/logger'
+import { startMockWorker } from '@/mocks/browser'
 
-async function enableMocking() {
-  if (import.meta.env.VITE_DATA_SOURCE !== 'api') {
-    const { worker } = await import('../mocks/browser')
-    return worker.start({ onUnhandledRequest: 'bypass' })
-  }
+async function bootstrap() {
+  await startMockWorker()
 
-  return Promise.resolve()
+  const app = createApp(App)
+  app.use(createPinia())
+  app.mount('#app')
+
+  logger.info('RuyiBigScreen app mounted', {
+    dataSource: import.meta.env.VITE_DATA_SOURCE ?? 'mock',
+  })
 }
 
-enableMocking()
-  .then(() => {
-    const app = createApp(App)
-    app.use(createPinia())
-    app.mount('#app')
-    logger.info('RuyiBigScreen mounted')
-  })
-  .catch((error: unknown) => {
-    logger.error('Failed to start application', error)
-  })
+void bootstrap()

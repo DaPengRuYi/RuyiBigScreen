@@ -1,60 +1,57 @@
 <template>
-  <div ref="chartRef" class="echarts" data-testid="pie-status-chart"></div>
+  <div
+    ref="chartRef"
+    class="chart"
+    data-testid="chart-pie"
+  />
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import type { CategoryItem } from '../types/dashboard'
-import { observeResize } from '../utils/resize'
+import type { CategoryDistribution } from '@/types/dashboard'
+import { useElementResize } from '@/utils/resize'
 
 const props = defineProps<{
-  data: CategoryItem[]
+  data: CategoryDistribution[]
 }>()
 
-const chartRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
-let resizeObserver: ResizeObserver | null = null
+const chartRef = ref<HTMLElement | null>(null)
+let chart: echarts.ECharts | undefined
 
 function renderChart() {
-  if (!chart) return
+  if (!chartRef.value) {
+    return
+  }
 
+  chart ??= echarts.init(chartRef.value)
   chart.setOption({
-    color: ['#42d8ff', '#49f2b8', '#ffd166', '#ff8e72', '#8a7dff'],
+    color: ['#2ee6ff', '#47d16c', '#f9d85e', '#ff7a90'],
     tooltip: { trigger: 'item' },
     legend: {
-      orient: 'vertical',
-      right: 0,
-      top: 'middle',
-      textStyle: { color: '#89a7bf' },
+      bottom: 0,
+      itemWidth: 10,
+      itemHeight: 10,
+      textStyle: { color: '#a9c6dc' },
     },
     series: [
       {
         name: '分类占比',
         type: 'pie',
-        radius: ['42%', '68%'],
-        center: ['38%', '52%'],
-        avoidLabelOverlap: true,
-        label: { color: '#e8f7ff', formatter: '{b}\n{d}%' },
-        labelLine: { lineStyle: { color: '#5e7f99' } },
+        radius: ['45%', '68%'],
+        center: ['50%', '45%'],
+        label: { color: '#d6edf7', formatter: '{b}\n{d}%' },
+        labelLine: { lineStyle: { color: '#4f8eaa' } },
         data: props.data,
       },
     ],
   })
 }
 
-onMounted(() => {
-  if (!chartRef.value) return
-  chart = echarts.init(chartRef.value)
-  resizeObserver = observeResize(chartRef.value, () => chart?.resize())
-  renderChart()
-})
-
+onMounted(renderChart)
 watch(() => props.data, renderChart, { deep: true })
+useElementResize(chartRef, () => chart?.resize())
 
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  chart?.dispose()
-})
+onBeforeUnmount(() => chart?.dispose())
 </script>

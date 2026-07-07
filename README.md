@@ -1,24 +1,41 @@
 # RuyiBigScreen
 
-如意数据大屏是一个公开的数据可视化大屏教学项目，目标是帮助学习者从 0 到 1 理解并动手完成一个完整的数据大屏项目。
+如意数据大屏是一个公开开源的教学型数据可视化大屏项目，目标是帮助学生和初学者从 0 到 1 学习如何自己动手制作一个完整的数据可视化大屏。
 
-## Project Goal
+## 技术栈
 
-This project is designed as a beginner-friendly learning path for building a data visualization big screen from scratch.
+- Vue 3 + Vite + TypeScript
+- ECharts
+- Pinia
+- Axios
+- MSW mock
+- Vitest
+- Playwright
+- ESLint + Prettier + Stylelint
 
-Learners will gradually understand:
+## 本地运行
 
-- how a data big screen project is organized
-- how visual layout and dashboard structure are designed
-- how charts, data, and interaction work together
-- how to turn a static page into a maintainable visualization project
+```bash
+npm install
+npm run dev
+```
 
-## 中文介绍
+默认使用 mock 数据。后续接入真实 API 时，可以设置：
 
-如意数据大屏主要面向学生、教师和数据可视化初学者。项目后续会持续补充从基础页面、图表组件、模拟数据、接口接入到完整大屏实战的内容。
+```bash
+VITE_DATA_SOURCE=api
+```
 
-当前仓库先完成开源项目初始化，后续将逐步增加课程案例和代码实现。
+## 常用命令
 
-## License
+```bash
+npm run lint
+npm run format
+npm run test
+npm run test:e2e
+npm run build
+```
 
-This project is open source under the MIT License.
+## 项目定位
+
+这个项目当前阶段只实现纯前端，所有页面数据都通过 services 层获取。默认 mock 模式下读取本地模拟数据；切换到 api 模式后，会通过 Axios 访问预留接口，方便后续平滑接入后端。

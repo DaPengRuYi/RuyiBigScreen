@@ -1,10 +1,14 @@
+export type MetricStatus = 'up' | 'down' | 'stable' | 'good' | 'warning'
+export type ActivityLevel = 'info' | 'warning' | 'success'
+
 export interface SummaryMetric {
+  id?: string
   key: string
   label: string
   value: number
   unit: string
   trend: number
-  status: 'up' | 'down' | 'stable'
+  status: MetricStatus
 }
 
 export interface TrendPoint {
@@ -17,6 +21,8 @@ export interface CategoryDistribution {
   name: string
   value: number
 }
+
+export type CategoryItem = CategoryDistribution
 
 export interface RankingItem {
   city: string
@@ -41,20 +47,32 @@ export interface MapNode {
   level: 'core' | 'hot' | 'normal'
 }
 
+export interface HubNode {
+  name: string
+  value: number
+  coord: [number, number]
+  status: 'good' | 'warning' | 'danger'
+  description: string
+}
+
 export interface ActivityItem {
   id: string
   time: string
-  type: 'info' | 'warning' | 'success'
-  title: string
-  location: string
+  level: ActivityLevel
+  type?: ActivityLevel
+  title?: string
+  message?: string
+  location?: string
 }
 
 export interface DashboardData {
+  updatedAt: string
   summary: SummaryMetric[]
   trend: TrendPoint[]
   categories: CategoryDistribution[]
   ranking: RankingItem[]
   radar: RadarData
   mapNodes: MapNode[]
+  hubNodes: HubNode[]
   activities: ActivityItem[]
 }

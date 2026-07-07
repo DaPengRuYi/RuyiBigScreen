@@ -1,6 +1,7 @@
 import type { DashboardData } from '@/types/dashboard'
 
 export const dashboardMock: DashboardData = {
+  updatedAt: '2026-07-07T00:00:00.000Z',
   summary: [
     { key: 'visits', label: '今日访问量', value: 128960, unit: '次', trend: 12.8, status: 'up' },
     { key: 'orders', label: '实时订单数', value: 3684, unit: '单', trend: 6.4, status: 'up' },
@@ -54,6 +55,7 @@ export const dashboardMock: DashboardData = {
     {
       id: 'act-001',
       time: '21:42:18',
+      level: 'success',
       type: 'success',
       title: '北京教学节点完成数据同步',
       location: '华北区',
@@ -61,6 +63,7 @@ export const dashboardMock: DashboardData = {
     {
       id: 'act-002',
       time: '21:39:04',
+      level: 'info',
       type: 'info',
       title: '实时订单流量进入高峰监控',
       location: '全域',
@@ -68,6 +71,7 @@ export const dashboardMock: DashboardData = {
     {
       id: 'act-003',
       time: '21:35:27',
+      level: 'warning',
       type: 'warning',
       title: '深圳节点图表渲染耗时升高',
       location: '华南区',
@@ -75,6 +79,7 @@ export const dashboardMock: DashboardData = {
     {
       id: 'act-004',
       time: '21:31:56',
+      level: 'success',
       type: 'success',
       title: '学生实训任务提交量突破阈值',
       location: '教学平台',
@@ -82,9 +87,47 @@ export const dashboardMock: DashboardData = {
     {
       id: 'act-005',
       time: '21:26:12',
+      level: 'info',
       type: 'info',
       title: '课程案例下载服务运行正常',
       location: '资源中心',
+    },
+  ],
+  hubNodes: [
+    {
+      name: '北京节点',
+      value: 82,
+      coord: [24, 27],
+      status: 'good',
+      description: '华北教学访问节点运行稳定',
+    },
+    {
+      name: '上海节点',
+      value: 78,
+      coord: [74, 63],
+      status: 'good',
+      description: '华东数据同步节点运行稳定',
+    },
+    {
+      name: '深圳节点',
+      value: 72,
+      coord: [78, 35],
+      status: 'good',
+      description: '华南实时订单节点运行稳定',
+    },
+    {
+      name: '成都节点',
+      value: 64,
+      coord: [32, 66],
+      status: 'warning',
+      description: '西南实训任务节点需要关注',
+    },
+    {
+      name: '武汉节点',
+      value: 58,
+      coord: [50, 18],
+      status: 'warning',
+      description: '华中资源下载节点轻微波动',
     },
   ],
 }

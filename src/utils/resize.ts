@@ -18,3 +18,18 @@ export function useElementResize(target: Ref<HTMLElement | null>, callback: () =
     window.removeEventListener('resize', callback)
   })
 }
+
+export function observeResize(target: HTMLElement, callback: () => void) {
+  const observer = new ResizeObserver(() => callback())
+  const disconnect = observer.disconnect.bind(observer)
+
+  observer.observe(target)
+  window.addEventListener('resize', callback)
+
+  observer.disconnect = () => {
+    disconnect()
+    window.removeEventListener('resize', callback)
+  }
+
+  return observer
+}

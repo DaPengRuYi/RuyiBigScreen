@@ -75,11 +75,11 @@
             v-for="item in dashboard.activities"
             :key="item.id"
             class="activity-list__item"
-            :class="`activity-list__item--${item.type}`"
+            :class="`activity-list__item--${item.type ?? item.level}`"
           >
             <time>{{ item.time }}</time>
-            <strong>{{ item.title }}</strong>
-            <span>{{ item.location }}</span>
+            <strong>{{ item.title ?? item.message }}</strong>
+            <span>{{ item.location ?? item.level }}</span>
           </li>
         </ul>
       </BasePanel>
